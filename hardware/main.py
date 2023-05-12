@@ -12,7 +12,7 @@ buzzer_level = 0
 
 while True:
   bme = bme280.BME280(i2c=i2c)
-  temp = (bme.read_temperature()/100) * (9/5) + 32 # Temperature in degrees F
+  temp = (bme.read_temperature()/100) # Temperature in degrees C
   hum = bme.read_humidity() / 1024 # Humidity in percent
   pres = bme.read_pressure() / 256 / 1000 # Pressure in kPa
   
