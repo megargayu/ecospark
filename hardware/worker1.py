@@ -50,6 +50,10 @@ blue_rgb_led.value(0)
 
 rgb_color = None
 
+# Button
+
+button = Pin(14, Pin.IN)
+
 
 # # MQ2 object creation
 # mq2 = ADC(Pin(13))
@@ -65,7 +69,7 @@ mq_sensors = [
     {"name": "MQ5", "port": 27, "limit": 1300},
     {"name": "MQ8", "port": 25, "limit": 850},
     {"name": "MQ7", "port": 26, "limit": 1200},
-    {"name": "MQ3", "port": 12, "limit": 2100}
+    {"name": "MQ3", "port": 12, "limit": 3500}
 ]
 
 for sensor in mq_sensors:
@@ -80,6 +84,8 @@ green_led.value(0)
 try:
     for second in range(300):
         print(f"{wait - second} seconds left until sensors are done heating up.")
+        if button.value() == 0:
+            raise KeyboardInterrupt
         sleep(1)
 except KeyboardInterrupt:
     print("Skipping heating process.")
@@ -102,8 +108,9 @@ while True:
 
     limit_exceeded = False
 
-    if temp > weather_limits["temp"]:
-        pass
+    if hum > weather_limits["hum"]:
+        limit_exceeded = True
+
 
     for sensor in mq_sensors:
         value = sensor["object"].read()
