@@ -4,9 +4,9 @@ app = Flask(__name__)
 
 current_state = None
 
-@app.route("/")
+@app.route("/test")
 def test():
-    return "pog"
+    return "SUCCESS"
 
 @app.route("/status")
 def get_status():
