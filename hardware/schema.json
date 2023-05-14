@@ -1,0 +1,18 @@
+WORKER -> WORKER:
+[{
+	"mac_address": "String",
+  "time": "String (Unix Timestamp)",
+  "sensors": [{ // Includes weather sensor
+    "name": "String",
+    "value": "Float"
+  }],
+  "panic_flag": "Bool", // When true, any intercepting ESP32 will sound the alarm
+}, /* + ANY OTHER ESP DATA RECIEVED, STRIP DUPLICATES */]
+
+MASTER -> FLASK:
+{
+  "mac_address": "String",
+  "time": "String (Unix Timestamp)",
+  "panic_flag": "Bool",  // When true, any intercepting ESP32 will sound the alarm
+  "data": [ !! "WORKER DATA (SEE WORKER -> WORKER)" !! ],
+}

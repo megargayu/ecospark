@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import ModuleCardComponent from "../components/ModuleCardComponent";
+import MapComponent from "../components/MapComponent";
 
 const DashboardPage = () => {
   return (
@@ -7,6 +8,8 @@ const DashboardPage = () => {
       <Typography className="text-white text-5xl font-bold" variant="h1">
         dashboard
       </Typography>
+
+      <MapComponent />
 
       <ModuleCardComponent />
     </Box>

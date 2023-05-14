@@ -25,13 +25,9 @@ import network
 
 # ESP32 - Pin assignment
 
-# I2C connection for weather sensor
-weather_sensor = bme280.BME280(i2c=I2C(scl=Pin(22), sda=Pin(21), freq=10000))
-
 # Buzzer setup
 buzzer = Pin(15, Pin.OUT)
 buzzer_level = 0
-
 
 # MQ2 object creation
 mq2 = ADC(Pin(13))
@@ -40,13 +36,7 @@ mq2.atten(ADC.ATTN_11DB)
 
 
 while True:
-    temp = weather_sensor.read_temperature()/100  # Temperature in degrees C
-    hum = weather_sensor.read_humidity() / 1024  # Humidity in percent
-    pres = weather_sensor.read_pressure() / 256 / 1000  # Pressure in kPa
 
-    print('Temperature: ', temp)
-    print('Humidity: ', hum)
-    print('Pressure: ', pres)
 
     mq2_value = mq2.read()
 
