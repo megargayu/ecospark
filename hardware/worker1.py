@@ -1,4 +1,4 @@
-from machine import Pin, I2C, ADC
+from machine import Pin, I2C, ADC, PWM
 from time import sleep
 import bme280
 import ubinascii
@@ -39,6 +39,18 @@ green_led = Pin(23, Pin.OUT)
 # Blue led
 blue_led = Pin(2, Pin.OUT)
 
+# RGB Led
+red_rgb_led = Pin(19, Pin.OUT)
+green_rgb_led = Pin(18, Pin.OUT)
+blue_rgb_led = Pin(5, Pin.OUT)
+
+green_rgb_led.value(0)
+red_rgb_led.value(0)
+blue_rgb_led.value(0)
+
+rgb_color = None
+
+
 # # MQ2 object creation
 # mq2 = ADC(Pin(13))
 # mq2.width(ADC.WIDTH_12BIT)
@@ -50,9 +62,9 @@ weather_limits = {"temp": 37, "hum": 60, "pres": 110}
 mq_limit = 1500
 mq_sensors = [
     {"name": "MQ2", "port": 13, "limit": 1500},
-    {"name": "MQ5", "port": 27, "limit": 1200},
-    {"name": "MQ8", "port": 25, "limit": 750},
-    {"name": "MQ7", "port": 26, "limit": 1000},
+    {"name": "MQ5", "port": 27, "limit": 1300},
+    {"name": "MQ8", "port": 25, "limit": 850},
+    {"name": "MQ7", "port": 26, "limit": 1200},
     {"name": "MQ3", "port": 12, "limit": 2100}
 ]
 
@@ -75,8 +87,6 @@ except KeyboardInterrupt:
 blue_led.value(0)
 green_led.value(1)
     
-
-
 while True:
     temp = weather_sensor.read_temperature() / 100  # Temperature in degrees C
     hum = weather_sensor.read_humidity() / 1024  # Humidity in percent
@@ -104,6 +114,24 @@ while True:
             print(f"{sensor['name']} has a value of {value}")
 
     buzzer.value(int(limit_exceeded))
+    
+    if limit_exceeded:
+        if rgb_color:
+            red_rgb_led.value(1)
+            green_rgb_led.value(0)
+            blue_rgb_led.value(0)
+        else:
+            red_rgb_led.value(0)
+            green_rgb_led.value(0)
+            blue_rgb_led.value(1)
+            
+        rgb_color = not rgb_color
+    else:
+        rgb_color = None
+        red_rgb_led.value(0)
+        green_rgb_led.value(1)
+        blue_rgb_led.value(0)            
+    
     print("----------------------------------------------------------------------------------")
     sleep(1)
 
