@@ -7,20 +7,20 @@ import network
 
 # ESP NOW CODE lines 10-23
 
-# A WLAN interface must be active to send()/recv()
-sta = network.WLAN(network.STA_IF)  # Or network.AP_IF
-sta.active(True)
-sta.disconnect()      # For ESP8266
-
-e = espnow.ESPNow()
-e.active(True)
-peer = b'\xcc\xdb\xa7\x56\x3e\x00'   # MAC address of peer's wifi interface
-e.add_peer(peer)      # Must add_peer() before send()
-
-e.send(peer, "Starting...")
-for i in range(100):
-    e.send(peer, str(i)*20, True)
-e.send(peer, b'end')
+# # A WLAN interface must be active to send()/recv()
+# sta = network.WLAN(network.STA_IF)  # Or network.AP_IF
+# sta.active(True)
+# sta.disconnect()      # For ESP8266
+# 
+# e = espnow.ESPNow()
+# e.active(True)
+# peer = b'\xcc\xdb\xa7\x56\x3e\x00'   # MAC address of peer's wifi interface
+# e.add_peer(peer)      # Must add_peer() before send()
+# 
+# e.send(peer, "Starting...")
+# for i in range(100):
+#     e.send(peer, str(i)*20, True)
+# e.send(peer, b'end')
 
 
 # ESP32 - Pin assignment
@@ -54,7 +54,10 @@ for sensor in mq_sensors:
     sensor["object"].width(ADC.WIDTH_12BIT)
     sensor["object"].atten(ADC.ATTN_11DB)
 
-sleep(300)
+wait = 300
+for second in range(300):
+    print(f"{wait - second} seconds left until sensors are done heating up.")
+    sleep(1)
 
 while True:
     temp = weather_sensor.read_temperature() / 100  # Temperature in degrees C
@@ -85,3 +88,4 @@ while True:
     buzzer.value(int(limit_exceeded))
     print("----------------------------------------------------------------------------------")
     sleep(1)
+
