@@ -6,13 +6,27 @@ WORKER -> WORKER:
     "name": "String",
     "value": "Float"
   }],
-  "panic_flag": "Bool", // When true, any intercepting ESP32 will sound the alarm
+  "panic_flag": "Mac Address || String(None)", // When not none, any intercepting ESP32 will sound the alarm
 }, /* + ANY OTHER ESP DATA RECIEVED, STRIP DUPLICATES */]
 
 MASTER -> FLASK:
 {
   "mac_address": "String",
   "time": "String (Unix Timestamp)",
-  "panic_flag": "Bool",  // When true, any intercepting ESP32 will sound the alarm
+  "panic_flag": "Mac Address || String(None)",  // When not none, any intercepting ESP32 will sound the alarm
   "data": [ !! "WORKER DATA (SEE WORKER -> WORKER)" !! ],
 }
+
+
+
+WORKER -> WORKER:
+panic_flag
+!! N !! (number of messages)
+mac_address,time
+!! a_i !! (number of sensors for this message)
+name,value
+
+MASTER -> FLASK:
+panic_flag
+mac_address,time
+WORKER -> WORKER SCHEMA (EXCLUDING PANIC_FLAG)
