@@ -17,10 +17,11 @@ const ModuleCardComponent = ({
   status,
   location,
   lastUpdate,
+  className,
   onShowMoreInfo,
 }) => {
   return (
-    <Card className="bg-slate-800 text-white p-2 py-4 m-2 flex rounded-xl h-72 w-full">
+    <Card className={`bg-slate-800 text-white p-2 py-4 m-2 flex rounded-xl h-72 w-full ${className}`}>
       <img src={CardIcon} className="w-40 h-40 brightness-75 contrast-150" />
 
       <div className="flex flex-col justify-center mx-4 w-full">

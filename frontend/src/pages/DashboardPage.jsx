@@ -64,10 +64,8 @@ const DashboardPage = () => {
         {data && (
           <ModuleCardComponent
             name="Master"
-            status={
-              data.panic_flag !== "None" ? "🔴 PANICKING" : "🟢 Active"
-            }
-            lastUpdate="9:00 PM"
+            status={data.panic_flag !== "None" ? "🔴 PANICKING" : "🟢 Active"}
+            lastUpdate={formatTime(data.time)}
             showMoreInfo={false}
           />
         )}
@@ -84,6 +82,7 @@ const DashboardPage = () => {
               onShowMoreInfo={() => {
                 setMoreInfoPage(i);
               }}
+              className={worker.panic_flag === worker.mac_address ? "bg-red-800" : ""}
             />
           ))}
 

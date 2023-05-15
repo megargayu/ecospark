@@ -25,7 +25,7 @@ const MoreInfoComponent = ({ workerData }) => {
 
       <Box className="flex space-x-5 mb-8">
         <Tooltip title="Current Status">
-          <Typography className="mb-1 font-bold w-24 text-center text-sm bg-slate-700 p-0.5 rounded-full">
+          <Typography className="mb-1 font-bold px-2 text-center text-sm bg-slate-700 p-0.5 rounded-full">
             {workerData.panic_flag !== "None" ? "🔴 PANICKING" : "🟢 Active"}
           </Typography>
         </Tooltip>
@@ -53,7 +53,7 @@ const MoreInfoComponent = ({ workerData }) => {
         {Object.keys(workerData.sensors).map((name, i) => (
           <IconInfoComponent key={i} icon={SensorsIcon}>
             {name}: {workerData.sensors[name]}
-            <span className="text-gray-200 whitespace-pre">{units[name]}</span>
+            <span className="text-gray-300 whitespace-pre">{units[name]}</span>
           </IconInfoComponent>
         ))}
       </Box>
