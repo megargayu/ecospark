@@ -1,26 +1,23 @@
 from machine import Pin, I2C, ADC, PWM
-from time import sleep
+from time import sleep, localtime, mktime
 import bme280
 import ubinascii
 import espnow
 import network
+import json
 
-# ESP NOW CODE lines 10-23
 
-# # A WLAN interface must be active to send()/recv()
-# sta = network.WLAN(network.STA_IF)  # Or network.AP_IF
-# sta.active(True)
-# sta.disconnect()      # For ESP8266
-# 
-# e = espnow.ESPNow()
-# e.active(True)
-# peer = b'\xcc\xdb\xa7\x56\x3e\x00'   # MAC address of peer's wifi interface
-# e.add_peer(peer)      # Must add_peer() before send()
-# 
-# e.send(peer, "Starting...")
-# for i in range(100):
-#     e.send(peer, str(i)*20, True)
-# e.send(peer, b'end')
+
+sta = network.WLAN(network.STA_IF)  # Or network.AP_IF
+sta.active(True)
+sta.disconnect()  # For ESP8266
+
+e = espnow.ESPNow()
+e.active(True)
+peer = b"\xcc\xdb\xa7\x56\x3e\x00"  # MAC address of Worker 2's wifi interface
+e.add_peer(peer)  # Must add_peer() before send()
+
+print("Connected to Worker 2 Successfully!")
 
 
 # ESP32 - Pin assignment
@@ -110,6 +107,17 @@ while True:
         limit_exceeded = True
 
 
+    data = {
+        "mac_address": ubinascii.hexlify(network.WLAN().config('mac'),':').decode(),
+        "time": int(mktime(localtime())),
+        "panic_flag": "None",
+        "sensors": {
+            "hum": hum,
+            "temp": temp,
+            "pres": pres,
+        }
+    }
+    
     for sensor in mq_sensors:
         value = sensor["object"].read()
         if value > sensor["limit"]:
@@ -117,8 +125,18 @@ while True:
             limit_exceeded = True
         else:
             print(f"{sensor['name']} has a value of {value}")
+          
+        data["sensors"][sensor["name"]] = value
+
+    if limit_exceeded:
+      data["panic_flag"] = data["mac_address"]
 
     buzzer.value(int(limit_exceeded))
+
+    print(json.dumps(data, indent=4))
+
+    # Send data to Worker 2
+    e.send(peer, json.dumps(data))
     
     if limit_exceeded:
         if rgb_color:
@@ -140,3 +158,4 @@ while True:
     print("----------------------------------------------------------------------------------")
     sleep(1)
 
+e.send(peer, "end")
