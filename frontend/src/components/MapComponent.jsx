@@ -87,18 +87,12 @@ const MapComponent = () => {
 
   const handleMouseUp = (evt) => {
     setDragging([imageLocation, false]);
-
-    console.log(evt)
-    if (evt.clientX == startLocations[0][0] && evt.clientY == startLocations[0][1])
-    {
-      console.log("cliecked!!")
-    }
   }
 
   const handleMouseMove = (evt) => {
     if (!dragging[1]) return;
 
-    console.log(evt.clientX - dragging[1][0] + dragging[0][0]);
+    // console.log(evt.clientX - dragging[1][0] + dragging[0][0]);
     setImageLocation(
       clampImageLocation([
         evt.clientX - dragging[1][0] + dragging[0][0],
