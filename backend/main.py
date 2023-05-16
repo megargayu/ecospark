@@ -18,12 +18,12 @@ current_state = {
             "sensors": {
                 "temp": 24,
                 "hum": 30,
-                "pres": 50,
-                "MQ2": 2,
-                "MQ3": 3,
-                "MQ7": 7,
-                "MQ8": 8,
-                "MQ5": 5
+                "pres": 100,
+                "MQ2": 622,
+                "MQ3": 509,
+                "MQ7": 730,
+                "MQ8": 821,
+                "MQ5": 518
             }
         },
         # Worker 2
@@ -32,10 +32,10 @@ current_state = {
             "time": 1684120306,
             "panic_flag": "None",
             "sensors": {
-                "MQ4": 4,
+                "MQ4": 427,
                 "MQ135": 135,
-                "MQ6": 6,
-                "MQ9": 9
+                "MQ6": 605,
+                "MQ9": 908
             }
         }
     ]
@@ -51,5 +51,7 @@ def get_status():
 
 @app.route("/update-master", methods=["POST"])
 def update_master():
+    global current_state
     current_state = request.json
+    print(request.json)
     return "SUCCESS"

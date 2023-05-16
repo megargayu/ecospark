@@ -6,9 +6,9 @@ import network
 import json
 import urequests
 
-url = "http://{IP_ADDRESS}:5000/update-0"
-ssid = ""
-password = ""
+url = "http://172.20.10.3:5000/update-master"
+ssid = "FBI1234"
+password = "VAPO-6273"
 
 sta = network.WLAN(network.STA_IF)  # Or network.AP_IF
 sta.active(True)
@@ -29,7 +29,6 @@ def do_connect():
     print('network config:', sta_if.ifconfig())
 
 do_connect()
-print(urequests.get(url="http://192.168.115.236:5000/test").text)
 
 from_worker_2 = []
 
@@ -50,7 +49,7 @@ while True:
 
     print(data)
 
-    urequests.post(url=url, data = data)
+    urequests.post(url=url, data = json.dumps(data))
 
     print("----------------------------------------------------------------------------------")
     sleep(1)
